@@ -1,0 +1,10 @@
+{
+  "name": "Cerebro (Go)",
+  "image": "mcr.microsoft.com/devcontainers/go:1.25",
+  "postCreateCommand": "go mod tidy",
+  "customizations": {
+    "vscode": {
+      "extensions": ["golang.go"]
+    }
+  }
+}
