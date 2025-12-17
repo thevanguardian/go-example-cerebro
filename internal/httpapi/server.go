@@ -11,9 +11,13 @@ type Config struct {
 	Addr string
 }
 
+// Fairly standard multiplexer for setting up a basic http server
+// allowing routing of requests to specific application pieces.
+// Will also be the basis for the basic healthz check which is standard
+// across many orchestration tools as healthcheck endpoints
 func NewServer(cfg Config) *http.Server {
-	// Setup
 	mux := http.NewServeMux()
+	// grabs routes and links them to their handlers
 	registerRoutes(mux)
 
 	handler := middlewareChain(
