@@ -1,7 +1,7 @@
 # Cerebro Sentinel
 
 <p align="left">
-  <img alt="Go Version" src="https://img.shields.io/badge/go-1.23-blue.svg" />
+  <img alt="Go Version" src="https://img.shields.io/badge/go-1.25-blue.svg" />
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green.svg" />
   <img alt="Build Status" src="https://img.shields.io/badge/build-in%20progress-lightgrey.svg" />
   <img alt="Security" src="https://img.shields.io/badge/security-best%20practices-blueviolet.svg" />
@@ -44,7 +44,7 @@ The project is being built incrementally in defined phases, beginning with found
 
 ## Requirements
 
-- Go 1.23 or newer
+- Go 1.25 or newer
 - Docker (optional)
 - Visual Studio Code with the Dev Containers extension (optional)
 
