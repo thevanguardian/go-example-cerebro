@@ -1,8 +1,11 @@
 package httpapi
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -31,6 +34,7 @@ func requestLogger(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r) // call the next handler in the chain
 		slog.Info(
 			"request",
+			"request_id", RequestID(r.Context()),
 			"method", r.Method,
 			"path", r.URL.Path,
 			"duration", time.Since(start),
@@ -53,4 +57,30 @@ func recoverPanic(next http.Handler) http.Handler {
 		}()
 		next.ServeHTTP(w, r)
 	})
+}
+
+// assign a unique request ID to each incoming HTTP request
+// useful for tracing and debugging, especially in distributed systems
+const requestIDHeader = "X-Request-Id"
+
+func requestID(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		id := strings.TrimSpace(r.Header.Get(requestIDHeader))
+		if id == "" {
+			id = newRequestID()
+		}
+
+		w.Header().Set(requestIDHeader, id)
+		ctx := WithRequestID(r.Context(), id)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+func newRequestID() string {
+	var b [16]byte
+	if _, err := rand.Read(b[:]); err != nil {
+		slog.Error("failed to generate request id", "err", err)
+		return hex.EncodeToString([]byte(time.Now().Format(time.RFC3339Nano)))
+	}
+	return hex.EncodeToString(b[:])
 }
