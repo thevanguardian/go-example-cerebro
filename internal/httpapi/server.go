@@ -19,9 +19,10 @@ func NewServer(cfg Config) *http.Server {
 	mux := http.NewServeMux()
 	// grabs routes and links them to their handlers
 	registerRoutes(mux)
-
+	// add new middleware functions here
 	handler := middlewareChain(
 		mux,
+		requestID,
 		requestLogger,
 		recoverPanic,
 	)
